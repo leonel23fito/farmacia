@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Registro de medicamentos</title>
+        <link href="../dist/css/styles.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+        <script>window.$ = window.jQuery = require('../dist/jquery-3.6.0.min.js');</script>
+    
+    </head>
+    <body >
+     
+                    <div  class="container-fluid">
+                
+
+                        <div class="row " style="height: 400px;">
+                            <div class="col-lg-5">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Registre Farmaco</h3></div>
+                                    <div class="card-body">
+                                        <form id="myform">
+                                            <div class="form-group">
+                                                <label   class="small mb-1" for="inputEmailAddress">name</label>
+                                                <input required class="form-control py-4" name="name" id="inputEmailAddress" type="text" placeholder="Ingrese el nombre del farmaco" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">Precenatacion</label>
+                                                <select name="Precentacion"  class="form-control py-4" id="inputEmailAddress" type="select" placeholder="Enter email address" >
+                                                    <!-- Opciones de la lista -->
+                                                    <option value="1">Opción 1</option>
+                                                    <option value="2" selected>Opción 2</option> <!-- Opción por defecto -->
+                                                    <option value="3">Opción 3</option>
+                                                  </select>
+                                              
+                                                
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputPassword">Descripcion</label>
+                                                <input required class="form-control py-4" name="description" id="inputPassword" type="text" placeholder="Enter password" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">fecha de Registro en el sistema</label>
+                                                <input required class="form-control py-4" id="inputEmailAddress" name="Fecha_I"  type="date" placeholder="Enter email address" />
+                                            </div> 
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">fecha de caducidad</label>
+                                                <input  required class="form-control py-4" id="inputEmailAddress" name="Fecha_c" type="date" placeholder="Enter email address" />
+                                            </div>
+
+                                            
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">cantidad en lote nuevo</label>
+                                                <input required class="form-control py-4" id="inputEmailAddress" name="CantidaXL" type="number" placeholder="Enter email address" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">precio de lote</label>
+                                                <input required class="form-control py-4" id="inputEmailAddress" name="PrecioXL" type="number" placeholder="Enter email address" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputEmailAddress">precio por unidad</label>
+                                                <input required class="form-control py-4" id="inputEmailAddress" name="PrecioXU" type="number" placeholder="Enter email address" />
+                                            </div>
+                            
+                                          
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                            
+                                                <button class="btn btn-primary" type="submit" id="log" href="index.html">Registrar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="row" id="contenedor">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                  
+            <div id="layoutAuthentication_footer">
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="../dist/js/scripts.js"></script>
+
+<script>
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/farmacia', {useNewUrlParser: true, useUnifiedTopology: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("mongo.db");
+});
+const farmaco= require("../database/modelos/farmacos")
+
+
+$(document).ready(function(){
+    const { ipcRenderer } = require('electron')
+   const contenendor=$("#contenedor");
+
+  document.querySelector("#myform").addEventListener("submit",(event)=>{
+event.preventDefault();
+const   datos=[];
+$(".form-group input").each(function(){
+       		    datos.push( $(this).val());
+       		});
+
+console.log("se a comenzado a crear el  nuevo farmaco")
+
+let new_farmaco=  new farmaco({
+name:datos[0],
+pretentation:"no definida",
+description:datos[1],
+precioXU:datos[6],
+precioXL:datos[5],
+cantidaXL:datos[4],
+fecha_I:datos[2],
+fecha_c:datos[3],
+});
+new_farmaco.save((error,document)=>{
+if(error){
+
+contenendor.html("")
+contenendor.show();
+    console.log("error"+error); 
+}else{
+
+  contenendor.html('<div class="modal fade " id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"><div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content bg-success"><div class="modal-header"><h5 class="modal-title" id="exampleModalLongTitle">sucess</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><p>se a guardado correctamente</p></div></div></div></div>')
+  
+
+  $('#exampleModalCenter').modal()
+  console.log(document);
+  ipcRenderer.send("cargar_farmacos")
+}
+
+})
+
+  })
+
+
+
+})
+
+
+
+</script>
+
+    </body>
+</html>

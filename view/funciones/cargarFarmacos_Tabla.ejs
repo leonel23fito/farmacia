@@ -1,0 +1,41 @@
+<script >
+    $(document).ready(function(){
+          const { ipcRenderer } = require('electron')       
+          let valor=false
+          $('#contenedor_central').load('../template/pages/tabla.html');
+    alert("se a enviado a iterar")
+   
+    ipcRenderer.send("listarentabla");
+      document.querySelector("#listarfarmacos").addEventListener("click", (event)=>{
+    event.preventDefault();
+    ipcRenderer.send("listarentabla");
+       var oTable = $('#dataTable').dataTable();
+      oTable.fnDestroy();
+    
+    })
+  
+        
+        ipcRenderer.on('listarentabla_main', (event,dat) => {
+
+     
+      $('#dataTable').DataTable({
+    "data": dat
+    ,
+    "columns": [
+        { "data": "name" },
+        { "data": "description" },
+        { "data": "precioXU" },
+        { "data": "cantidaXL" },
+        { "data": "precioXL" },
+        { "data": "fecha_c" }
+    ]
+    }); 
+    valor=true
+    })
+    
+    
+      
+     
+        
+      })
+    </script>

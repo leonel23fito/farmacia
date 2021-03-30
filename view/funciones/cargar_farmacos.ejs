@@ -1,0 +1,41 @@
+<script>
+
+
+
+$(document).ready(function(){
+  const { ipcRenderer } = require('electron')
+  const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/farmacia', {useNewUrlParser: true, useUnifiedTopology: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("mongo.db");
+});
+const clve=__dirname;
+const farmaco= require("../../database/modelos/farmacos")
+$("#contenedor_central").empty();
+async function datos(){
+  const cursor = farmaco.find().cursor();
+  console.log("hola")
+  const contenedor=$("#contenedor_central");
+  for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+  console.log(doc); 
+contenedor.append (' <div clas="px-2"><div class="  col-md-3 "> <div   class="  card" style="width: 18rem;"><img class="card-img-top" src="'+ clve +'../../pastillas.jpg" alt="Card image cap"><div class="card-body"><h5 class="card-title">'+doc.name +'</h5><h6 class="card-subtitle mb-2 text-muted">'+doc.precentation+'</h6><ul class="list-group list-group-flush"><li class="list-group-item"> <p class="card-text"><p>Cantidad en existencia:'+doc.cantidaXL+'</p></li><li class="list-group-item"><p>Precio por unidad:'+doc.precioXU+'</p></li><li class="list-group-item"><p>'+doc.description +'</p></li></ul></p><a href="#" >'+"Fecha de ingreso al sistema:"+doc.fecha_I +'</a></div></div></div></div>');
+ 
+}
+
+
+
+}
+datos()
+
+ipcRenderer.on('cargar_farmacos_main', (event) => {
+
+  $("#contenedor_central").empty();
+ datos();
+  })
+
+})
+
+
+</script>
