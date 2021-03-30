@@ -20,15 +20,23 @@
      
       $('#dataTable').DataTable({
     "data": dat
-    ,
+    , "columnDefs": [ {
+         "targets": -1,
+         "data": null,
+         "defaultContent": "<button>Click!</button>"
+     } ],
     "columns": [
         { "data": "name" },
         { "data": "description" },
         { "data": "precioXU" },
         { "data": "cantidaXL" },
         { "data": "precioXL" },
-        { "data": "fecha_c" }
-    ]
+        { "data": "fecha_c" },
+        { "defaultContent": "<button type='button' class='btn btn-danger center-block'><i class='fas fa-trash-alt'></i></button>" },
+        { "defaultContent": "<button type='button' class='btn btn-danger center-block'><i class='far fa-edit'></i></button>" }
+      ],
+  
+
     }); 
     valor=true
     })
